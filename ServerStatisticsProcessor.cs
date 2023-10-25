@@ -1,60 +1,54 @@
-﻿using Microsoft.Extensions.Options;
-
+﻿using Weather_Monitoring.ReadConfig;
 public class ServerStatisticsProcessor
-{/*
+{
     //private readonly IMongoDBService _mongoDBService;
- //   private readonly IMessageQueueService _messageQueueService;
-  //  private readonly IHubContext<AlertHub> _hubContext;
+    //   private readonly IMessageQueueService _messageQueueService;
+    //  private readonly IHubContext<AlertHub> _hubContext;
     //private readonly AnomalyDetectionConfig _anomalyDetectionConfig;
 
-    public ServerStatisticsProcessor( IOptions<AnomalyDetectionConfig> anomalyDetectionConfig)
-    {
+    /*  public ServerStatisticsProcessor( IOptions<AnomalyDetectionConfig> anomalyDetectionConfig)
+      {
 
+      }
+
+      public async Task StartProcessingAsync()
+      {
+          await _messageQueueService.StartReceivingMessagesAsync();
+      }
+
+      public async Task ProcessMessageAsync(ServerStatistics data)
+      {
+          // Persist data to MongoDB
+          await _mongoDBService.InsertServerStatisticsAsync(data);
+
+          // Detect anomalies and send alerts
+          if (IsMemoryUsageAnomaly(data) || IsCpuUsageAnomaly(data))
+          {
+              await _hubContext.Clients.All.SendAsync("ReceiveAnomalyAlert", data);
+          }
+          else if (IsMemoryHighUsage(data) || IsCpuHighUsage(data))
+          {
+              await _hubContext.Clients.All.SendAsync("ReceiveHighUsageAlert", data);
+          }
+      }*/
+
+    private bool IsMemoryAnomaly(ServerStatistics current, ServerStatistics previous)
+    {
+        return current.MemoryUsage > (previous.MemoryUsage * (1 + ConfigReader.ReadAnomalyDetectionConfig().MemoryUsageAnomalyThresholdPercentage));
     }
 
-    public async Task StartProcessingAsync()
+    private bool IsCpuAnomaly(ServerStatistics current, ServerStatistics previous)
     {
-        await _messageQueueService.StartReceivingMessagesAsync();
+        return current.CpuUsage > (previous.CpuUsage * (1 + ConfigReader.ReadAnomalyDetectionConfig().CpuUsageAnomalyThresholdPercentage));
     }
 
-    public async Task ProcessMessageAsync(ServerStatistics data)
+    private bool IsMemoryHighUsage(ServerStatistics statistics)
     {
-        // Persist data to MongoDB
-        await _mongoDBService.InsertServerStatisticsAsync(data);
-
-        // Detect anomalies and send alerts
-        if (IsMemoryUsageAnomaly(data) || IsCpuUsageAnomaly(data))
-        {
-            await _hubContext.Clients.All.SendAsync("ReceiveAnomalyAlert", data);
-        }
-        else if (IsMemoryHighUsage(data) || IsCpuHighUsage(data))
-        {
-            await _hubContext.Clients.All.SendAsync("ReceiveHighUsageAlert", data);
-        }
+        return (statistics.MemoryUsage / (statistics.MemoryUsage + statistics.AvailableMemory)) > ConfigReader.ReadAnomalyDetectionConfig().MemoryUsageThresholdPercentage;
     }
 
-    private bool IsMemoryUsageAnomaly(ServerStatistics data)
+    private bool IsCpuHighUsage(ServerStatistics statistics)
     {
-        // Implement memory usage anomaly logic
-        // Return true if anomaly is detected, false otherwise
+        return statistics.CpuUsage > ConfigReader.ReadAnomalyDetectionConfig().CpuUsageThresholdPercentage;
     }
-
-
-    private bool IsCpuUsageAnomaly(ServerStatistics data)
-    {
-        // Implement CPU usage anomaly logic
-        // Return true if anomaly is detected, false otherwise
-    }
-
-    private bool IsMemoryHighUsage(ServerStatistics data)
-    {
-        // Implement memory high usage logic
-        // Return true if high usage is detected, false otherwise
-    }
-
-    private bool IsCpuHighUsage(ServerStatistics data)
-    {
-        // Implement CPU high usage logic
-        // Return true if high usage is detected, false otherwise
-    }*/
 }

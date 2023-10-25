@@ -1,2 +1,3 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using Weather_Monitoring.ReadConfig;
+var t = new MessageReceiver();
+t.ReceiveMessages();

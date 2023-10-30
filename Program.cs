@@ -1,3 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
-var t = new MessageReceiver();
-t.ReceiveMessages();
+﻿var receiver = new MessageReceiver();
+var receivedMessage = await receiver.ReceiveMessagesAsync();
+var Obj = receiver.DeserializeServerStatistics(receivedMessage);
+var mongoRepo = new MongoDBRepository();
+mongoRepo.InsertIntoMongoDB(Obj);

@@ -31,6 +31,7 @@ public class MessageReceiver
             return await messageReceivedTaskCompletionSource.Task;
         }
     }
+
     public ServerStatistics DeserializeServerStatistics(string message)
     {
         var doc = JsonDocument.Parse(message);

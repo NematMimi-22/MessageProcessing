@@ -9,7 +9,6 @@
             var client = new MongoClient(connectionString);
             var database = client.GetDatabase("ServerStatistics");
             _collection = database.GetCollection<ServerStatistics>("ServerStatistics");
-
         }
         public void InsertIntoMongoDB(ServerStatistics serverStats)
         {

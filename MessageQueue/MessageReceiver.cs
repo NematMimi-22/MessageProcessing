@@ -1,8 +1,9 @@
-﻿using RabbitMQ.Client;
+﻿using MessageProcessing.MessageQueue;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
-public class MessageReceiver
+public class MessageReceiver : IMessageQueue
 {
     private readonly string _queueName = "test";
 

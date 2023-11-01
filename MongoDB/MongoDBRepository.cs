@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
-    public class MongoDBRepository
-    {
+using MessageProcessing.MongoDB;
+public class MongoDBRepository : IMongoDBRepository
+{
         private readonly IMongoCollection<ServerStatistics> _collection;
         private string connectionString = "mongodb://localhost:27017";
 

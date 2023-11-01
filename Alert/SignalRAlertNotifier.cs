@@ -16,10 +16,9 @@ namespace MessageProcessing.Alert
 
             _hubConnection.Closed += async (error) =>
             {
-                // Handle the error, log it, and attempt to restart the connection after a delay
                 Console.WriteLine($"Connection closed with error: {error?.Message}");
-                await Task.Delay(TimeSpan.FromSeconds(5)); // Wait for 5 seconds before restarting the connection
-                await StartAsync(); // Restart the connection
+                await Task.Delay(TimeSpan.FromSeconds(5)); 
+                await StartAsync();
             };
         }
 

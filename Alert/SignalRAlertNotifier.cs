@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using System;
-using System.Threading.Tasks;
 
 namespace MessageProcessing.Alert
 {
@@ -8,16 +6,16 @@ namespace MessageProcessing.Alert
     {
         private readonly HubConnection _hubConnection;
 
-        public SignalRAlertNotifier(string signalRHubUrl)
+        public SignalRAlertNotifier(ISignalRConfig signalRHubUrl)
         {
             _hubConnection = new HubConnectionBuilder()
-                .WithUrl(signalRHubUrl)
+                .WithUrl(signalRHubUrl.SignalRUrl)
                 .Build();
 
             _hubConnection.Closed += async (error) =>
             {
                 Console.WriteLine($"Connection closed with error: {error?.Message}");
-                await Task.Delay(TimeSpan.FromSeconds(5)); 
+                await Task.Delay(TimeSpan.FromSeconds(5));
                 await StartAsync();
             };
         }

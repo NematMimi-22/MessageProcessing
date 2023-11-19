@@ -5,19 +5,26 @@ using System.Text;
 using System.Text.Json;
 public class MessageReceiver : IMessageQueue
 {
-    private readonly string _queueName = "test";
+    private readonly IRabbitMQConfiguration _rabbitMQConfiguration;
+
+    public MessageReceiver(IRabbitMQConfiguration rabbitMQConfiguration)
+    {
+        _rabbitMQConfiguration = rabbitMQConfiguration;
+    }
 
     public async Task<string> ReceiveMessagesAsync()
     {
         var messageReceivedTaskCompletionSource = new TaskCompletionSource<string>();
         var factory = new ConnectionFactory()
         {
-            HostName = "localhost",
+            HostName = _rabbitMQConfiguration.HostName,
+            UserName = _rabbitMQConfiguration.UserName,
+            Password = _rabbitMQConfiguration.Password
         };
         using (var connection = factory.CreateConnection())
         using (var channel = connection.CreateModel())
         {
-            channel.QueueDeclare(queue: _queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+            channel.QueueDeclare(queue: _rabbitMQConfiguration.QueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, ea) =>
             {
@@ -28,7 +35,7 @@ public class MessageReceiver : IMessageQueue
                 Console.WriteLine($"Received message: {message}");
                 messageReceivedTaskCompletionSource.SetResult(message);
             };
-            channel.BasicConsume(queue: _queueName, autoAck: true, consumer: consumer);
+            channel.BasicConsume(queue: _rabbitMQConfiguration.QueueName, autoAck: true, consumer: consumer);
             return await messageReceivedTaskCompletionSource.Task;
         }
     }

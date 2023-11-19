@@ -1,11 +1,7 @@
 ﻿namespace MessageProcessing.ReadConfig
 {
-    public class SignalRConfig
+    public class SignalRConfig : ISignalRConfig
     {
         public string SignalRUrl { get; set; }
-        public SignalRConfig(string signalRUrl)
-        {
-            SignalRUrl = signalRUrl;
-        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 using MessageProcessing.MongoDB;
-public class MongoDBRepository : IMongoDBRepository
+public class MongoDBRepository : IRepository
 {
         private readonly IMongoCollection<ServerStatistics> _collection;
         private string connectionString = "mongodb://localhost:27017";
@@ -11,7 +11,7 @@ public class MongoDBRepository : IMongoDBRepository
             var database = client.GetDatabase("ServerStatistics");
             _collection = database.GetCollection<ServerStatistics>("ServerStatistics");
         }
-        public void InsertIntoMongoDB(ServerStatistics serverStats)
+        public void Insert(ServerStatistics serverStats)
         {
             try
             {
